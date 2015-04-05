@@ -6,10 +6,10 @@ require 'usatoday_bestsellers/version'
 Gem::Specification.new do |spec|
   spec.name          = "usatoday_bestsellers"
   spec.version       = UsatodayBestsellers::VERSION
-  spec.authors       = ["sonjapeterson"]
+  spec.authors       = ["Sonja Peterson"]
   spec.email         = ["sonja.peterson@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = "Wrapper for USA Today Bestsellers API."
+  spec.description   = "A simple Ruby wrapper for accessing USA Today bestseller data."
   spec.homepage      = ""
   spec.license       = "MIT"
 
