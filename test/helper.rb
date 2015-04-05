@@ -1,4 +1,4 @@
-require 'usatoday_bestsellers'
+require 'rowling'
 require 'minitest/spec'
 require 'minitest/autorun'
 require 'minitest/reporters'

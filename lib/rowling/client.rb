@@ -1,4 +1,4 @@
-module UsatodayBestsellers
+module Rowling
   class Client
     attr_accessor *Configuration::CONFIGURATION_KEYS
 

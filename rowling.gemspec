@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'usatoday_bestsellers/version'
+require 'rowling/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "usatoday_bestsellers"
-  spec.version       = UsatodayBestsellers::VERSION
+  spec.name          = "rowling"
+  spec.version       = Rowling::VERSION
   spec.authors       = ["Sonja Peterson"]
   spec.email         = ["sonja.peterson@gmail.com"]
   spec.summary       = "Wrapper for USA Today Bestsellers API."

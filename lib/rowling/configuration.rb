@@ -1,4 +1,4 @@
-module UsatodayBestsellers
+module Rowling
   module Configuration
     DEFAULT_FORMAT = :json
     CONFIGURATION_KEYS = [:api_key, :format]
