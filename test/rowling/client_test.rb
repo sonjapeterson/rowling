@@ -2,10 +2,19 @@ require 'helper'
 
 describe Rowling::Client do
 
-  it "should configure valid configuration keys" do
-    client = Rowling::Client.new(api_key: "my_secret_key", format: :json)
-    client.api_key.must_equal "my_secret_key"
-    client.format.must_equal :json
+  before do
+    @client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"], format: :json)
   end
 
+  it "should configure valid configuration keys" do
+    @client.api_key.must_equal ENV["USATODAY_BESTSELLER_KEY"]
+    @client.format.must_equal :json
+  end
+
+  describe "requests", :vcr do
+    it "should get classes" do
+      classes = @client.get_classes
+      classes.must_equal ["---", "Fiction", "NonFiction"]
+    end
+  end
 end
