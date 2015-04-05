@@ -1,5 +1,7 @@
 require "usatoday_bestsellers/version"
+require "usatoday_bestsellers/configuration"
 
 module UsatodayBestsellers
-  # Your code goes here...
+  extend Configuration
+
 end
