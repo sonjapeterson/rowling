@@ -1,8 +1,9 @@
 module UsatodayBestsellers
   module Configuration
     DEFAULT_FORMAT = :json
+    CONFIGURATION_KEYS = [:api_key, :format]
 
-    attr_accessor :format, :api_key
+    attr_accessor *CONFIGURATION_KEYS
 
     def self.extended(base)
       base.reset
