@@ -1,6 +1,13 @@
 class String
   def camelize
     return self if self !~ /_/ && self =~ /[A-Z]+.*/
-    split('_').map{|e| e.capitalize}.join
+    arr = split('_').map do |e| 
+      if e == "api"
+        e.upcase
+      else
+        e.capitalize
+      end
+    end
+    arr.join
   end
 end

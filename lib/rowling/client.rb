@@ -1,6 +1,5 @@
 module Rowling
   class Client
-    include HTTParty
 
     attr_accessor *Configuration::CONFIGURATION_KEYS
 
