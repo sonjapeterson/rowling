@@ -24,5 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest-vcr", "~> 1.3.0"
   spec.add_development_dependency "webmock"
 
-  spec.add_runtime_dependency "httparty", "~> 0.13.3"
+  spec.add_dependency "httparty", "~> 0.13.3"
+  spec.add_dependency "addressable", "~> 2.3.6"
 end

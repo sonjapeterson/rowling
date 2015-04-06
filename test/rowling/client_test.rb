@@ -16,5 +16,10 @@ describe Rowling::Client do
       classes = @client.get_classes
       classes.must_equal ["---", "Fiction", "NonFiction"]
     end
+
+    it "should find a book" do
+      book = @client.get_book(isbn: "9780758280428")
+      book.must_be_instance_of Rowling::Book
+    end
   end
 end

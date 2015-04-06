@@ -5,7 +5,6 @@ require 'minitest/reporters'
 require 'vcr'
 require 'minitest-vcr'
 require 'webmock'
-require 'httparty'
 require 'pry'
 
 reporter_options = { color: true }
