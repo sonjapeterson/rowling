@@ -19,31 +19,29 @@ module Rowling
       class_response["Classes"]
     end
 
-    def get_book(args={})
-      isbn = args.delete(:isbn)
+    def search_books(args={})
       segments = ["titles"]
-      segments << isbn if isbn
-      errors = []
-      begin
-        book_response = make_request({segments: segments, query: args})
-      rescue StandardError => e
-        if book_response.code == 503 && args[:isbn]
-          errors << "Book with ISBN #{args[:isbn]} not found, or you've made too many requests."
-        elsif book_response.code != 200 
-          errors << e.message
+      book_response = make_request({segments: segments, query: args})
+      if titles = book_response["Titles"]
+        titles.map do |title|
+          Rowling::Book.new(title)
         end
-      end
-      if errors.empty?
-        Rowling::Book.new(book_response)
       else
-        puts errors.join("\n")
+        []
       end
     end
+
+    def find_book_by_isbn(isbn)
+      segments = ["titles", isbn]
+      book_response = make_request({ segments: segments })
+      Rowling::Book.new(book_response["Title"])
+    end
+
 
     def make_request(args={})
       if self.api_key
         query = { api_key: self.api_key }
-        query.merge!(args[:options]) if args[:options]
+        query.merge!(args[:query]) if args[:query]
         url = base_template.expand({
           segments: args[:segments],
           query: query}) 

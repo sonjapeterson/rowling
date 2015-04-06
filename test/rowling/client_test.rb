@@ -22,9 +22,15 @@ describe Rowling::Client do
       classes.must_equal ["---", "Fiction", "NonFiction"]
     end
 
-    it "should get a book based on a valid ISBN" do
-      book = @client.get_book(isbn: "9780758280428")
+    it "should find a book based on a valid ISBN" do
+      book = @client.find_book_by_isbn("9780758280428")
       book.must_be_instance_of Rowling::Book
     end
+
+    it "should search for books by title" do
+      books = @client.search_books(author: "J.K. Rowling")
+      books.first.must_be_instance_of Rowling::Book
+    end
+
   end
 end

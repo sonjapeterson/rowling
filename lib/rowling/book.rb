@@ -3,14 +3,17 @@ module Rowling
     ATTRIBUTES = [:title, :title_api_url, :author, :class, :description, :book_list_appearances, :highest_rank]
 
     def initialize(response)
-      title_data = response["Title"]
       ATTRIBUTES.each do |key|
-        send("#{key}=", title_data[key.to_s.camelize])
+        send("#{key}=", response[key.to_s.camelize]) if response[key.to_s.camelize]
       end
-      self.category_id = title_data["Category"]["CategoryID"]
-      self.category_name = title_data["Category"]["CategoryName"]
-      self.ranks = title_data["RankHistories"].map do |rank|
-        Rowling::Rank.new(rank)
+      if response["Category"]
+        self.category_id = response["Category"]["CategoryID"]
+        self.category_name = response["Category"]["CategoryName"]
+      end
+      if response["RankHistories"]
+        self.ranks = response["RankHistories"].map do |rank|
+          Rowling::Rank.new(rank)
+        end
       end
     end
 

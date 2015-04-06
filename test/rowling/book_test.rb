@@ -6,7 +6,7 @@ describe Rowling::Book do
   end
 
   it "should parse the attributes of a book from a request when initializing", :vcr do
-    book = @client.get_book(isbn: "9780758280428")
+    book = @client.find_book_by_isbn("9780758280428")
     book.title.must_equal " Double Fudge Brownie Murder"
     book.author.must_equal "Joanne Fluke"
     book.category_id.must_equal 0
@@ -16,7 +16,7 @@ describe Rowling::Book do
   end
 
   it "should parse rank histories as instances of Rowling::Rank", :vcr do
-    book = @client.get_book(isbn: "9780758280428")
+    book = @client.find_book_by_isbn("9780758280428")
     book.ranks.first.must_be_instance_of Rowling::Rank
   end
 
