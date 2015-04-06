@@ -14,5 +14,11 @@ describe Rowling::Book do
     book.book_list_appearances.must_equal 1 
     book.highest_rank.must_equal 39
   end
+
+  it "should parse rank histories as instances of Rowling::Rank", :vcr do
+    book = @client.get_book(isbn: "9780758280428")
+    book.ranks.first.must_be_instance_of Rowling::Rank
+  end
+
 end
 
