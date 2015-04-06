@@ -36,6 +36,15 @@ module Rowling
       Rowling::Book.new(book_response["Title"])
     end
 
+    def get_detailed_version(book)
+      if book.title_api_url
+        segments = [book.title_api_url]
+        book_response = make_request({ segments: segments })
+        Rowling::Book.new(book_response["Title"])
+      else
+        raise StandardError "Can't find details for book without title api url set"
+      end
+    end
 
     def make_request(args={})
       if self.api_key

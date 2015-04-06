@@ -32,5 +32,14 @@ describe Rowling::Client do
       books.first.must_be_instance_of Rowling::Book
     end
 
+    it "should get a detailed version of a book found through search" do
+      books = @client.search_books(author: "J.K. Rowling")
+      detailed_book = @client.get_detailed_version(books.first)
+      detailed_book.must_be_instance_of Rowling::Book
+      detailed_book.title.must_equal "Fantastic Beasts & Where to Find Them"
+      detailed_book.ranks.count.must_equal 24
+      detailed_book.category_id.must_equal 140
+      detailed_book.category_name.must_equal "Youth"
+    end
   end
 end
