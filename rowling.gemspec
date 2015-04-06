@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "httparty", "~> 0.13.3"
   spec.add_dependency "addressable", "~> 2.3.6"
+  spec.add_dependency "require_all", "~> 1.3.2"
 end

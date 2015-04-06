@@ -1,11 +1,9 @@
 require "httparty"
 require "addressable/uri"
 require "addressable/template"
-require "ext/string"
-require "rowling/version"
-require "rowling/configuration"
-require "rowling/client.rb"
-require "rowling/book.rb"
+require "require_all"
+require "date"
+require_all 'lib'
 
 module Rowling
   extend Configuration
