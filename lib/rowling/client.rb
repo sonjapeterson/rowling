@@ -14,33 +14,55 @@ module Rowling
     end
 
     def get_classes(args={})
-      class_response = make_request({segments: "classes"})
+      class_response = make_request({segments: "classes", query: args})
       class_response["Classes"]
     end
 
-    def search_books(args={})
-      segments = ["titles"]
+    def get_categories(args={})
+      category_response = make_request({segments: "categories", query: args})
+      category_response["Categories"]
+    end
+
+    def get_dates(args={})
+      date_response = make_request({segments: "dates", query: args})
+      date_response["Dates"]
+    end
+
+    def search_books(args={}, raw=false)
+      segments = "titles"
       book_response = make_request({segments: segments, query: args})
-      if titles = book_response["Titles"]
-        titles.map do |title|
-          Rowling::Book.new(title)
-        end
+      if raw
+        book_response
       else
-        []
+        if titles = book_response["Titles"]
+          titles.map do |title|
+            Rowling::Book.new(title)
+          end
+        else
+          []
+        end
       end
     end
 
-    def find_book_by_isbn(isbn)
+    def find_book_by_isbn(isbn, raw=false)
       segments = ["titles", isbn]
       book_response = make_request({ segments: segments })
-      Rowling::Book.new(book_response["Title"])
+      if raw
+        book_response
+      else
+        Rowling::Book.new(book_response["Title"])
+      end
     end
 
-    def get_detailed_version(book)
+    def get_detailed_version(book, raw=false)
       if book.title_api_url
-        segments = [book.title_api_url]
+        segments = book.title_api_url
         book_response = make_request({ segments: segments })
-        Rowling::Book.new(book_response["Title"])
+        if raw
+          book_response
+        else
+          Rowling::Book.new(book_response["Title"])
+        end
       else
         raise StandardError "Can't find details for book without title api url set"
       end

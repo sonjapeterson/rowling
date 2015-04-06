@@ -41,5 +41,18 @@ describe Rowling::Client do
       detailed_book.category_id.must_equal 140
       detailed_book.category_name.must_equal "Youth"
     end
+
+    describe "when raw is set to true" do
+
+      it "should return a raw response for book search" do
+        response = @client.find_book_by_isbn("9780758280428", true)
+        response.must_be_instance_of Hash
+      end
+
+      it "should return a raw response for finding a book based on ISBN" do
+        response = @client.search_books({author: "J.K. Rowling"}, true)
+        response.must_be_instance_of Hash
+      end
+    end
   end
 end
