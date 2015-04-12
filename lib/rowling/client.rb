@@ -46,11 +46,15 @@ module Rowling
 
     def find_book_by_isbn(isbn, raw=false)
       segments = ["titles", isbn]
-      book_response = make_request({ segments: segments })
       if raw
-        book_response
+        make_request({ segments: segments }, true)
       else
-        Rowling::Book.new(book_response["Title"])
+        begin
+          book_response = make_request({ segments: segments })
+          Rowling::Book.new(book_response["Title"])
+        rescue Rowling::Response503Error => e
+          return nil
+        end
       end
     end
 
@@ -68,22 +72,41 @@ module Rowling
       end
     end
 
-    def make_request(args={})
+    def make_request(args={}, raw=false, tries=0)
       if self.api_key
-        query = { api_key: self.api_key }
+        query = { "api_key" => self.api_key }
         query.merge!(args[:query]) if args[:query]
-        url = base_template.expand({
-          segments: args[:segments],
-          query: query}) 
+        url = base_template.expand({segments: args[:segments], query: query})
         response = HTTParty.get(url)
-        if response.code != 200
-          raise StandardError, "Request Failed. Code #{response.code}."
+        if raw
           response
         else
-          response
+          if tries < 2
+            begin
+              check_errors(response)
+            rescue Rowling::Response403Error
+              tries += 1
+              sleep(2)
+              make_request(args, false, tries)
+            end
+          else
+            check_errors(response)
+          end
         end
       else
-        raise StandardError, "You must set an API key before making a request."
+        raise Rowling::NoAPIKeyError
+      end
+    end
+
+    def check_errors(response)
+      if response.code == 503
+        raise Rowling::Response503Error
+      elsif response.code == 403
+        raise Rowling::Response403Error
+      elsif response.code != 200
+        raise Rowling::ResponseError, "Request Failed. Code #{response.code}."
+      else
+        response
       end
     end
   end

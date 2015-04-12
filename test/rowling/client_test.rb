@@ -13,7 +13,7 @@ describe Rowling::Client do
 
   it "should raise an error if you try to make a request without an API key" do
     @client.api_key = nil
-    proc { @client.make_request }.must_raise StandardError
+    proc { @client.make_request }.must_raise Rowling::NoAPIKeyError 
   end
 
   describe "requests", :vcr do
@@ -27,8 +27,23 @@ describe Rowling::Client do
       book.must_be_instance_of Rowling::Book
     end
 
+    it "should return nil if no book is found by ISBN search" do
+      book = @client.find_book_by_isbn("9781555976859")
+      book.must_be_nil
+    end
+
     it "should search for books by title" do
-      books = @client.search_books(author: "J.K. Rowling")
+      books = @client.search_books(title: "Gone Girl")
+      books.first.must_be_instance_of Rowling::Book
+    end
+
+    it "should return an empty array if there are no results for a book" do
+      books = @client.search_books(author: "Geoffrey Chaucer")
+      books.must_equal []
+    end
+
+    it "should search for books by multiple parameters" do
+      books = @client.search_books(author: "Diana Gabaldon", book: "A Leaf on the Wind of All Hallows")
       books.first.must_be_instance_of Rowling::Book
     end
 
@@ -44,15 +59,24 @@ describe Rowling::Client do
 
     describe "when raw is set to true" do
 
-      it "should return a raw response for book search" do
-        response = @client.find_book_by_isbn("9780758280428", true)
-        response.must_be_instance_of Hash
+      describe "when searching by ISBN" do
+
+        it "should return a raw response" do
+          response = @client.find_book_by_isbn("9780758280428", true)
+          response.must_be_instance_of Hash
+        end
+
+        it "should not raise an error when a book is not found" do
+          response = @client.find_book_by_isbn("9781555976859", true)
+          response.must_be_instance_of String
+        end
       end
 
-      it "should return a raw response for finding a book based on ISBN" do
+      it "should return a raw response when searching for a book by parameters" do
         response = @client.search_books({author: "J.K. Rowling"}, true)
         response.must_be_instance_of Hash
       end
+
     end
   end
 end
