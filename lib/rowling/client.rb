@@ -68,16 +68,14 @@ module Rowling
           Rowling::Book.new(book_response["Title"])
         end
       else
-        raise StandardError "Can't find details for book without title api url set"
+        raise Rowling::ResponseError "Can't retrieve details for book without title api url set"
       end
     end
 
     def make_request(args={}, raw=false, tries=0)
       if self.api_key
-        query = { "api_key" => self.api_key }
-        query.merge!(args[:query]) if args[:query]
-        url = base_template.expand({segments: args[:segments], query: query})
-        response = HTTParty.get(url)
+        uri = build_uri(args)
+        response = HTTParty.get(uri)
         if raw
           response
         else
@@ -96,6 +94,12 @@ module Rowling
       else
         raise Rowling::NoAPIKeyError
       end
+    end
+
+    def build_uri(args)
+      query = { "api_key" => self.api_key }
+      query.merge!(args[:query]) if args[:query]
+      base_template.expand({segments: args[:segments], query: query}).to_s
     end
 
     def check_errors(response)
