@@ -57,6 +57,15 @@ describe Rowling::Client do
       detailed_book.category_name.must_equal "Youth"
     end
 
+    it "should get a booklist" do
+      booklists = @client.get_booklists(year: 2015, month: 2)
+      booklists.must_be_instance_of Array
+      booklists[0][:date].must_equal Date.new(2015, 2, 26)
+      booklists[0][:name].must_equal "Top 150"
+      booklists[0][:book_list_api_url].must_equal "BookLists/2015/2/26"
+      booklists[0][:books][0].title.must_equal "The Girl on the Train"
+    end
+
     describe "when raw is set to true" do
 
       describe "when searching by ISBN" do

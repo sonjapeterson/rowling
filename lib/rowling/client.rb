@@ -58,6 +58,29 @@ module Rowling
       end
     end
 
+    def get_booklists(args={}, raw=false)
+      date_segments = [:year, :month, :day].map do |segment|
+        args.delete(segment)
+      end
+      segments = ["booklists"].concat(date_segments.compact)
+      response = make_request({ segments: segments, args: args})
+      if raw
+        response
+      elsif lists = response["BookLists"]
+        lists.map do |list|
+          books = list["BookListEntries"].map.with_index do |entry, i|
+            [i, book = Rowling::Book.new(entry)]
+          end
+          books = books.to_h
+          date_vals = list["BookListDate"].values[0, 3].map{|v| v.to_i}
+          date = Date.new(*date_vals)
+          {date: date, name: list["Name"], books: books, book_list_api_url: list["BookListDate"]["BookListAPIUrl"]}
+        end
+      else
+        {}
+      end
+    end
+
     def get_detailed_version(book, raw=false)
       if book.title_api_url
         segments = book.title_api_url
