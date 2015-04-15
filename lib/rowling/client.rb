@@ -67,15 +67,7 @@ module Rowling
       if raw
         response
       elsif lists = response["BookLists"]
-        lists.map do |list|
-          books = list["BookListEntries"].map.with_index do |entry, i|
-            [i, book = Rowling::Book.new(entry)]
-          end
-          books = books.to_h
-          date_vals = list["BookListDate"].values[0, 3].map{|v| v.to_i}
-          date = Date.new(*date_vals)
-          {date: date, name: list["Name"], books: books, book_list_api_url: list["BookListDate"]["BookListAPIUrl"]}
-        end
+        lists.map{ |list| BookList.new(list) }
       else
         {}
       end
