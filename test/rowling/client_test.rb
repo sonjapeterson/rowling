@@ -3,11 +3,15 @@ require 'helper'
 describe Rowling::Client do
 
   before do
-    @client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"], raw: false)
+    @client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"])
   end
 
-  it "should configure valid configuration keys" do
+  it "should configure an api key" do
     @client.api_key.must_equal ENV["USATODAY_BESTSELLER_KEY"]
+  end
+
+  it "should configure default values for other attributes" do
+    @client.retries.must_equal 0
     @client.raw.must_equal false
   end
 

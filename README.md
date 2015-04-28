@@ -1,6 +1,6 @@
 # Rowling
 
-A Ruby wrapper for the USA Today Bestsellers API (work in progress!)
+A Ruby wrapper for the USA Today Bestsellers API
 
 # Usage
 
@@ -18,8 +18,10 @@ search_params = { author: "J.K. Rowling",
                 }
 
 books = client.search_books(search_params)
-
 ```
+
+You can view the search parameters [here]( http://developer.usatoday.com/docs/read/bestselling_books#parameters).
+
 
 This returns an array of Book objects:
 
@@ -45,3 +47,16 @@ You can also search for book lists by year, month and date. All parameters are o
 ```ruby
 client.get_booklists(year: 2015, month: 2)
 ```
+
+If you don't want the responses parsed for you, set up your client with "raw" set to true. The default is false.
+
+```ruby
+client = Rowling::Client.new(api_key: YOUR_API_KEY, raw: true)
+```
+
+If you would like the client to pause and retry requests when you hit a rate limit, set up your client with "retries" set to the number of times you would like it to retry requests. The default is 0.
+
+```ruby
+client = Rowling::Client.new(api_key: YOUR_API_KEY, retries: 2)
+```
+

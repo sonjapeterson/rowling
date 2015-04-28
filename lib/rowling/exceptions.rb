@@ -13,7 +13,7 @@ module Rowling
 
   class Response403Error < StandardError
     def message
-      "Exceeded quota per second"
+      "Exceeded quota per second/api rate limit"
     end
   end
 

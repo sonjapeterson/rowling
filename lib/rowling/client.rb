@@ -1,12 +1,20 @@
 module Rowling
   class Client
 
-    attr_accessor *Configuration::CONFIGURATION_KEYS
+    CONFIGURATION_KEYS = [:api_key, :raw, :retries]
 
     def initialize(args={})
-      Configuration::CONFIGURATION_KEYS.each do |key|
+      CONFIGURATION_KEYS.each do |key|
         send("#{key}=", args[key])
       end
+      set_defaults
+    end
+
+    attr_accessor *CONFIGURATION_KEYS
+
+    def set_defaults
+      @raw ||= false
+      @retries ||= 0
     end
 
     def base_template
@@ -94,12 +102,12 @@ module Rowling
         if self.raw
           response
         else
-          if tries < 2
+          if tries < self.retries
             begin
               check_errors(response)
             rescue Rowling::Response403Error
               tries += 1
-              sleep(2)
+              sleep(1)
               make_request(args, tries)
             end
           else
