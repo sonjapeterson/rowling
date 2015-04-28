@@ -5,6 +5,12 @@ module Rowling
     end
   end
 
+  class Response400Error < StandardError
+    def message
+      "Bad request (data not found)."
+    end
+  end
+
   class Response403Error < StandardError
     def message
       "Exceeded quota per second"

@@ -52,7 +52,7 @@ module Rowling
         begin
           book_response = make_request({ segments: segments })
           Rowling::Book.new(book_response["Title"])
-        rescue Rowling::Response503Error => e
+        rescue Rowling::Response503Error, Rowling::Response400Error => e
           return nil
         end
       end
@@ -120,6 +120,8 @@ module Rowling
     def check_errors(response)
       if response.code == 503
         raise Rowling::Response503Error
+      elsif response.code == 400
+        raise Rowling::Response400Error
       elsif response.code == 403
         raise Rowling::Response403Error
       elsif response.code != 200
