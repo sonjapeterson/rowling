@@ -17,6 +17,15 @@ describe Rowling::Client do
   end
 
   describe "requests", :vcr do
+    # this is a shitty test but the VCR request it created works for now,
+    # will need to come up with a better one at some point
+    it "should pause and retry when throttled" do
+      3.times do
+        book = @client.find_book_by_isbn("9780758280428")
+        book.must_be_instance_of Rowling::Book
+      end
+    end
+
     it "should get classes" do
       classes = @client.get_classes
       classes.must_equal ["---", "Fiction", "NonFiction"]
