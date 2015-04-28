@@ -5,8 +5,8 @@ describe 'configuration' do
     Rowling.reset
   end
 
-  it "should set json as the default format" do
-    Rowling.format.must_equal :json
+  it "should set raw to false as the default" do
+    Rowling.raw.must_equal false
   end
 
   it "should set the api key's default value as nil" do

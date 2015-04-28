@@ -3,12 +3,12 @@ require 'helper'
 describe Rowling::Client do
 
   before do
-    @client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"], format: :json)
+    @client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"], raw: false)
   end
 
   it "should configure valid configuration keys" do
     @client.api_key.must_equal ENV["USATODAY_BESTSELLER_KEY"]
-    @client.format.must_equal :json
+    @client.raw.must_equal false
   end
 
   it "should raise an error if you try to make a request without an API key" do
@@ -68,22 +68,25 @@ describe Rowling::Client do
     end
 
     describe "when raw is set to true" do
+      before do
+        @client.raw = true
+      end
 
       describe "when searching by ISBN" do
 
         it "should return a raw response" do
-          response = @client.find_book_by_isbn("9780758280428", true)
+          response = @client.find_book_by_isbn("9780758280428")
           response.must_be_instance_of Hash
         end
 
         it "should not raise an error when a book is not found" do
-          response = @client.find_book_by_isbn("9781555976859", true)
+          response = @client.find_book_by_isbn("9781555976859")
           response.must_be_instance_of String
         end
       end
 
       it "should return a raw response when searching for a book by parameters" do
-        response = @client.search_books({author: "J.K. Rowling"}, true)
+        response = @client.search_books({author: "J.K. Rowling"})
         response.must_be_instance_of Hash
       end
 

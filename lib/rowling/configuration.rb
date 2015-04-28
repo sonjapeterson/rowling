@@ -1,7 +1,6 @@
 module Rowling
   module Configuration
-    DEFAULT_FORMAT = :json
-    CONFIGURATION_KEYS = [:api_key, :format]
+    CONFIGURATION_KEYS = [:api_key, :raw]
 
     attr_accessor *CONFIGURATION_KEYS
 
@@ -11,7 +10,7 @@ module Rowling
 
     def reset
       self.api_key = nil
-      self.format = :json
+      self.raw = false
     end
 
     def configure

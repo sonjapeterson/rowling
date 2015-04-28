@@ -28,10 +28,10 @@ module Rowling
       date_response["Dates"]
     end
 
-    def search_books(args={}, raw=false)
+    def search_books(args={})
       segments = "titles"
       book_response = make_request({segments: segments, query: args})
-      if raw
+      if self.raw
         book_response
       else
         if titles = book_response["Titles"]
@@ -44,10 +44,10 @@ module Rowling
       end
     end
 
-    def find_book_by_isbn(isbn, raw=false)
+    def find_book_by_isbn(isbn)
       segments = ["titles", isbn]
-      if raw
-        make_request({ segments: segments }, true)
+      if self.raw
+        make_request({ segments: segments })
       else
         begin
           book_response = make_request({ segments: segments })
@@ -58,13 +58,13 @@ module Rowling
       end
     end
 
-    def get_booklists(args={}, raw=false)
+    def get_booklists(args={})
       date_segments = [:year, :month, :day].map do |segment|
         args.delete(segment)
       end
       segments = ["booklists"].concat(date_segments.compact)
       response = make_request({ segments: segments, args: args})
-      if raw
+      if self.raw
         response
       elsif lists = response["BookLists"]
         lists.map{ |list| BookList.new(list) }
@@ -73,11 +73,11 @@ module Rowling
       end
     end
 
-    def get_detailed_version(book, raw=false)
+    def get_detailed_version(book)
       if book.title_api_url
         segments = book.title_api_url
         book_response = make_request({ segments: segments })
-        if raw
+        if self.raw
           book_response
         else
           Rowling::Book.new(book_response["Title"])
@@ -87,11 +87,11 @@ module Rowling
       end
     end
 
-    def make_request(args={}, raw=false, tries=0)
+    def make_request(args={}, tries=0)
       if self.api_key
         uri = build_uri(args)
         response = HTTParty.get(uri)
-        if raw
+        if self.raw
           response
         else
           if tries < 2
@@ -100,7 +100,7 @@ module Rowling
             rescue Rowling::Response403Error
               tries += 1
               sleep(2)
-              make_request(args, false, tries)
+              make_request(args, tries)
             end
           else
             check_errors(response)
