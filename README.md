@@ -10,6 +10,7 @@ Set up a client:
 client = Rowling::Client.new(api_key: YOUR_KEY)
 ```
 
+##Books
 Search for books included in bestseller lists:
 
 ```ruby
@@ -42,11 +43,27 @@ Attributes will include:
 title, title_api_url, author, class, description, book_list_appearances, highest_rank, ranks
 ```
 
-You can also search for book lists by year, month and date. All parameters are optional and without parameters it will retrive the most recent list.
+##Booklists
+You can search for book lists by year, month and date. All parameters are optional and without parameters it will retrive the most recent list.
 
 ```ruby
 client.get_booklists(year: 2015, month: 2)
 ```
+
+##Other Requests
+
+```ruby
+# returns available book classes (fiction vs. nonfiction)
+client.get_classes
+
+# returns available book categories
+client.get_categories
+
+# returns dates that bestseller lists were published on (can be filtered by using parameters month and year, without parameters returns all dates since Oct. 1993)
+client.get_dates(year: 2015, month: 3)
+```
+
+##Options
 
 If you don't want the responses parsed for you, set up your client with "raw" set to true. The default is false.
 
