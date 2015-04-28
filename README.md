@@ -1,10 +1,10 @@
 # Rowling
 
-A Ruby wrapper for the USA Today Bestsellers API
+A Ruby wrapper for the [USA Today Bestsellers API](http://developer.usatoday.com/docs/read/bestselling_books).
 
 # Usage
 
-Set up a client:
+First, you'll need an API key, which you can get [here](http://developer.usatoday.com/member/register). Then, you can set up a client:
 
 ```ruby
 client = Rowling::Client.new(api_key: YOUR_KEY)
@@ -59,7 +59,8 @@ client.get_classes
 # returns available book categories
 client.get_categories
 
-# returns dates that bestseller lists were published on (can be filtered by using parameters month and year, without parameters returns all dates since Oct. 1993)
+# returns dates that bestseller lists were published on (can be filtered by using 
+# parameters of month and year, without parameters returns all dates since Oct. 1993)
 client.get_dates(year: 2015, month: 3)
 ```
 
@@ -76,4 +77,7 @@ If you would like the client to pause and retry requests when you hit a rate lim
 ```ruby
 client = Rowling::Client.new(api_key: YOUR_API_KEY, retries: 2)
 ```
+
+###Why is it called Rowling?
+She holds the record for longest #1 USA Today Bestselling Book, with Harry Potter and Sorcerer's Stone topping the list for 31 weeks in 1999. So that's pretty cool.
 
