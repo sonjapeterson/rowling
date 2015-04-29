@@ -21,9 +21,13 @@ describe Rowling::Client do
   end
 
   describe "requests", :vcr do
+    before do
+      @client.retries = 2
+    end
     # this is a shitty test but the VCR request it created works for now,
     # will need to come up with a better one at some point
     it "should pause and retry when throttled" do
+      retry_client = Rowling::Client.new(api_key: ENV["USATODAY_BESTSELLER_KEY"])
       3.times do
         book = @client.find_book_by_isbn("9780758280428")
         book.must_be_instance_of Rowling::Book
@@ -94,7 +98,7 @@ describe Rowling::Client do
 
         it "should not raise an error when a book is not found" do
           response = @client.find_book_by_isbn("9781555976859")
-          response.must_be_instance_of String
+          response.must_be_instance_of Hash
         end
       end
 
